@@ -78,10 +78,20 @@ Once installed, edit your <code>~/.gitconfig</code> and add the following lines<
   cmd = open -W -a Meld --args --auto-merge \"$LOCAL\" \"$BASE\" \"$REMOTE\" --output=\"$MERGED\"
 </code></pre>
 </blockquote>
+<blockquote>
+  <p><img class="emoji" title=":bulb:" alt=":bulb:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4a1.png" height="20" width="20" align="absmiddle"><strong>Tip:</strong> In order to open diff from command line/terminal, once installed, edit your <code>~/.zshrc</code> or  <code>~/.bash_profile</code>and add the following lines </p>
+
+  <pre><code>
+    alias meld="open -W -a Meld $@"
+  </code></pre>
+
+  You can use it like this: <code>meld file1 file2</code> or <code>meld folder1 folder2</code>
+  </blockquote>
+
 
 
 <blockquote>
-<p><img class="emoji" title=":bulb:" alt=":bulb:" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f4a1.png" height="20" width="20" align="absmiddle"><strong>Tip:</strong>
+<p><img class="emoji" title=":bulb:" alt=":bulb:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f4a1.png" height="20" width="20" align="absmiddle"><strong>Tip:</strong>
 Meld OSX also understands/checks for the following environment variables.
 
 <pre><code>G_ENABLE_DIAGNOSTIC 0 or 1
@@ -94,7 +104,7 @@ GTK_THEME Adwaita or Adwaita:dark
 </code></pre>
 <p>
 find the part that says
-</p> 
+</p>
 <pre><code>environment = dict(os.environ, **{
     "DYLD_LIBRARY_PATH": ":".join([
         os.path.join(APPPATH, "Resources", "lib"),
@@ -105,7 +115,7 @@ find the part that says
     "LC_CTYPE": LANG
 })
 </code></pre>
-<p>  
+<p>
 and change it to
 </p>
 <pre><code>environment = dict(os.environ, **{
