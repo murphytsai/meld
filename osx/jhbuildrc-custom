@@ -103,19 +103,19 @@ module_autogenargs['gobject-introspection'] = '--with-cairo=yes '# + autogenargs
 module_autogenargs['tango-icon-theme']      ='--disable-nls --disable-icon-framing '# + autogenargs
 module_autogenargs['harfbuzz']      = '--disable-gtk-doc --disable-gtk-doc-html --disable-gtk-doc-pdf --with-coretext --without-icu '# + autogenargs
 module_autogenargs['root-harfbuzz'] = '--disable-gtk-doc --disable-gtk-doc-html --disable-gtk-doc-pdf --with-coretext --without-icu '# + autogenargs
-module_autogenargs['fontconfig']     = '--with-cache-dir="~/Library/Caches/org.gnome.meld.fontconfig" --with-default-fonts=/System/Library/Fonts --with-add-fonts=/Library/Fonts,/Network/Library/Fonts,/System/Library/Fonts --disable-cache-build --disable-docs --disable-dependency-tracking'
+module_autogenargs['fontconfig']     = '--with-cache-dir="~/Library/Caches/org.gnome.meld.fontconfig" --with-default-fonts=/System/Library/Fonts --with-add-fonts=/Library/Fonts,/Network/Library/Fonts'
 #module_autogenargs['python3']  = '--enable-optimizations --disable-ipv6 --with-ensurepip=yes --with-system-expat --without-readline --with-pkg-config --disable-test-modules ' 
 
 module_autogenargs['libxml2']  = '--with-zlib --enable-ipv6=no ' 
-module_autogenargs['cairo']    = '--disable-full-testing --disable-trace --enable-ft --enable-fc --enable-quartz-image --enable-quartz-font --enable-quartz  --enable-png --enable-svg --enable-tee --enable-xml --enable-gobject --enable-pthread --disable-valgrind --disable-gtk-doc  --disable-gtk-doc-html --disable-dependency-tracking '# + autogenargs
+module_autogenargs['cairo']    = '--disable-full-testing --disable-trace --enable-ft --enable-fc --enable-quartz-image --enable-quartz-font --enable-quartz  --enable-png --enable-svg --enable-tee --enable-pdf --enable-ps --disable-xlib'
 
 module_mesonargs['atk']            = '--buildtype release --optimization 3 -Ddocs=false -Dintrospection=true'
 module_mesonargs['gdk-pixbuf']     = '--buildtype release --optimization 3 -Dbuiltin_loaders=all -Drelocatable=true -Ddocs=false'
 module_mesonargs['glib']           = '--buildtype release --optimization 3 -Dbsymbolic_functions=false -Dgtk_doc=false -Db_bitcode=true -Db_ndebug=true'
-module_mesonargs['pango']          = '--buildtype release --optimization 3 -Dintrospection=enabled'
+module_mesonargs['pango']          = '--buildtype release --optimization 3 -Dintrospection=disabled'
 module_mesonargs['pygobject3']     = '--buildtype release --optimization 3 -Dtests=false  -Dpycairo=enabled'
 module_mesonargs['gtksourceview4'] = '--buildtype release --optimization 3 -Dvapi=false'
-module_mesonargs['gtk+-3.0']       = '--buildtype release --optimization 3 -Dx11_backend=false -Dwayland_backend=false -Dbroadway_backend=false -Dwin32_backend=false -Dquartz_backend=true -Dxinerama=no -Dcloudproviders=false -Dprofiler=false -Dtracker3=false -Dcolord=no -Dgtk_doc=false -Dman=false -Dintrospection=true -Ddemos=false -Dexamples=false -Dtests=false -Dinstalled_tests=false -Dbuiltin_immodules=yes'
+module_mesonargs['gtk+-3.0']       = '--buildtype release --optimization 3 -Dx11_backend=false -Dwayland_backend=false -Dbroadway_backend=false -Dwin32_backend=false -Dquartz_backend=true -Dxinerama_backend=false'
 
 
 # Can be usefull when tweaking modulesets to avoid jhbuild overwriting:
