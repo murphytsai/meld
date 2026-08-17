@@ -25,7 +25,7 @@ jobs:
       - name: Setup Homebrew & Various Tools
         run: |
           #/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          brew install git ccache autoconf libtool automake pkg-config sassc optipng python bison flex cmake itstool gnu-sed
+          brew install git ccache autoconf libtool automake pkg-config sassc optipng python bison flex cmake itstool gnu-sed openssl@3
 
       - name: Setup JHbuild
         run: |
@@ -49,11 +49,18 @@ jobs:
       - name: Setup macOS SDK paths
         run: |
           export SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"
+          # Include system SDK paths
           export LDFLAGS="-L${SDKROOT}/usr/lib"
           export CPPFLAGS="-I${SDKROOT}/usr/include"
+          # Add Homebrew OpenSSL so Python's build can find ssl
+          export OPENSSL_PREFIX="$(brew --prefix openssl@3)"
+          export LDFLAGS="${LDFLAGS} -L${OPENSSL_PREFIX}/lib"
+          export CPPFLAGS="${CPPFLAGS} -I${OPENSSL_PREFIX}/include"
+          export PKG_CONFIG_PATH="${OPENSSL_PREFIX}/lib/pkgconfig${PKG_CONFIG_PATH:+:}$PKG_CONFIG_PATH"
           echo "SDKROOT=${SDKROOT}" >> $GITHUB_ENV
           echo "LDFLAGS=${LDFLAGS}" >> $GITHUB_ENV
           echo "CPPFLAGS=${CPPFLAGS}" >> $GITHUB_ENV
+          echo "PKG_CONFIG_PATH=${PKG_CONFIG_PATH}" >> $GITHUB_ENV
 
       - name: Build Environment
         run: |
@@ -91,7 +98,7 @@ jobs:
         working-directory: /
         shell: 'bash'
         run: |
-          brew install git ccache autoconf libtool automake pkg-config sassc optipng python bison flex cmake itstool gnu-sed intltool
+          brew install git ccache autoconf libtool automake pkg-config sassc optipng python bison flex cmake itstool gnu-sed intltool openssl@3
           pwd
           mkdir -p $HOME/Source          
           tar -xzf /Users/runner/work/meld/meld/Environment/environment.tar.gz
@@ -103,9 +110,14 @@ jobs:
           export SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"
           export LDFLAGS="-L${SDKROOT}/usr/lib"
           export CPPFLAGS="-I${SDKROOT}/usr/include"
+          export OPENSSL_PREFIX="$(brew --prefix openssl@3)"
+          export LDFLAGS="${LDFLAGS} -L${OPENSSL_PREFIX}/lib"
+          export CPPFLAGS="${CPPFLAGS} -I${OPENSSL_PREFIX}/include"
+          export PKG_CONFIG_PATH="${OPENSSL_PREFIX}/lib/pkgconfig${PKG_CONFIG_PATH:+:}$PKG_CONFIG_PATH"
           echo "SDKROOT=${SDKROOT}" >> $GITHUB_ENV
           echo "LDFLAGS=${LDFLAGS}" >> $GITHUB_ENV
           echo "CPPFLAGS=${CPPFLAGS}" >> $GITHUB_ENV
+          echo "PKG_CONFIG_PATH=${PKG_CONFIG_PATH}" >> $GITHUB_ENV
 
       - name: FIX gir
         run: |
