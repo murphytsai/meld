@@ -25,7 +25,28 @@ jobs:
       - name: Setup Homebrew & Various Tools
         run: |
           #/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          brew install git ccache autoconf libtool automake pkg-config sassc optipng python bison flex cmake itstool gnu-sed
+          brew update
+          brew install git ccache autoconf libtool automake pkg-config sassc optipng python bison flex cmake itstool gnu-sed \
+                       pango cairo fontconfig harfbuzz libunwind polkit libthai xft gobject-introspection
+
+      - name: Configure toolchain & env for Meson/JHBuild
+        run: |
+          # Ensure Xcode selection (no-op if path not present)
+          sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer || true
+
+          # Persist env for subsequent steps
+          echo "CC=/usr/bin/clang" >> $GITHUB_ENV
+          echo "CXX=/usr/bin/clang++" >> $GITHUB_ENV
+          # Disable ccache wrapper during configure/probe steps (it was interfering with linker probes)
+          echo "CCACHE_DISABLE=1" >> $GITHUB_ENV
+
+          # Ensure pkg-config can find Homebrew libraries
+          echo "PKG_CONFIG_PATH=/opt/homebrew/lib/pkgconfig:/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
+          echo "PKG_CONFIG_LIBDIR=/opt/homebrew/lib/pkgconfig:/usr/local/lib/pkgconfig" >> $GITHUB_ENV
+
+          # Relax errors caused by unknown warning options when meson probes compile small test programs
+          echo "CFLAGS=-Wno-error=unknown-warning-option -Wno-error=unknown-pragmas" >> $GITHUB_ENV
+          echo "CXXFLAGS=-Wno-error=unknown-warning-option -Wno-error=unknown-pragmas" >> $GITHUB_ENV
 
       - name: Setup JHbuild
         run: |
@@ -49,7 +70,13 @@ jobs:
       - name: Build Environment
         run: |
           echo Building in $HOME/gtk/inst
-          cd osx && /bin/bash ./build_env.sh          
+          cd osx && /bin/bash ./build_env.sh
+
+      - name: Dump pango meson-log (diagnostic)
+        if: always()
+        run: |
+          # If pango meson fails again, this file exists in the build log path; print it for debugging
+          cat /Users/runner/.cache/jhbuild/build/pango-1.57.1/meson-logs/meson-log.txt || true
 
       - name: Compress Environment
         working-directory: /
@@ -73,6 +100,17 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
 
+      - name: Configure toolchain & env (build-app)
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer || true
+          echo "CC=/usr/bin/clang" >> $GITHUB_ENV
+          echo "CXX=/usr/bin/clang++" >> $GITHUB_ENV
+          echo "CCACHE_DISABLE=1" >> $GITHUB_ENV
+          echo "PKG_CONFIG_PATH=/opt/homebrew/lib/pkgconfig:/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
+          echo "PKG_CONFIG_LIBDIR=/opt/homebrew/lib/pkgconfig:/usr/local/lib/pkgconfig" >> $GITHUB_ENV
+          echo "CFLAGS=-Wno-error=unknown-warning-option -Wno-error=unknown-pragmas" >> $GITHUB_ENV
+          echo "CXXFLAGS=-Wno-error=unknown-warning-option -Wno-error=unknown-pragmas" >> $GITHUB_ENV
+
       - name: Setup JHbuild
         run: |
           ln -sf $PWD/osx/jhbuildrc-custom $HOME/.jhbuildrc-custom
@@ -82,9 +120,11 @@ jobs:
         working-directory: /
         shell: 'bash'
         run: |
+          # Reinstall a few small tooling deps to ensure consistency
+          brew update
           brew install git ccache autoconf libtool automake pkg-config sassc optipng python bison flex cmake itstool gnu-sed intltool
           pwd
-          mkdir -p $HOME/Source          
+          mkdir -p $HOME/Source
           tar -xzf /Users/runner/work/meld/meld/Environment/environment.tar.gz
           rm -f /Users/runner/work/meld/meld/Environment/environment.tar.gz
           ls $HOME/gtk
