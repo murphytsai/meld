@@ -57,10 +57,18 @@ jobs:
           export LDFLAGS="${LDFLAGS} -L${OPENSSL_PREFIX}/lib"
           export CPPFLAGS="${CPPFLAGS} -I${OPENSSL_PREFIX}/include"
           export PKG_CONFIG_PATH="${OPENSSL_PREFIX}/lib/pkgconfig${PKG_CONFIG_PATH:+:}$PKG_CONFIG_PATH"
+          # Disable ccache wrapper during native configure/build detection to avoid
+          # breaking Meson/Autotools compiler and linker detection on macOS.
+          export CC=/usr/bin/clang
+          export CXX=/usr/bin/clang++
+          export CCACHE_DISABLE=1
           echo "SDKROOT=${SDKROOT}" >> $GITHUB_ENV
           echo "LDFLAGS=${LDFLAGS}" >> $GITHUB_ENV
           echo "CPPFLAGS=${CPPFLAGS}" >> $GITHUB_ENV
           echo "PKG_CONFIG_PATH=${PKG_CONFIG_PATH}" >> $GITHUB_ENV
+          echo "CC=${CC}" >> $GITHUB_ENV
+          echo "CXX=${CXX}" >> $GITHUB_ENV
+          echo "CCACHE_DISABLE=${CCACHE_DISABLE}" >> $GITHUB_ENV
 
       - name: Build Environment
         run: |
@@ -114,10 +122,17 @@ jobs:
           export LDFLAGS="${LDFLAGS} -L${OPENSSL_PREFIX}/lib"
           export CPPFLAGS="${CPPFLAGS} -I${OPENSSL_PREFIX}/include"
           export PKG_CONFIG_PATH="${OPENSSL_PREFIX}/lib/pkgconfig${PKG_CONFIG_PATH:+:}$PKG_CONFIG_PATH"
+          # Disable ccache wrapper during native configure/build detection
+          export CC=/usr/bin/clang
+          export CXX=/usr/bin/clang++
+          export CCACHE_DISABLE=1
           echo "SDKROOT=${SDKROOT}" >> $GITHUB_ENV
           echo "LDFLAGS=${LDFLAGS}" >> $GITHUB_ENV
           echo "CPPFLAGS=${CPPFLAGS}" >> $GITHUB_ENV
           echo "PKG_CONFIG_PATH=${PKG_CONFIG_PATH}" >> $GITHUB_ENV
+          echo "CC=${CC}" >> $GITHUB_ENV
+          echo "CXX=${CXX}" >> $GITHUB_ENV
+          echo "CCACHE_DISABLE=${CCACHE_DISABLE}" >> $GITHUB_ENV
 
       - name: FIX gir
         run: |
