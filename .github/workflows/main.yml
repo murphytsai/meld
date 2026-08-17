@@ -27,6 +27,13 @@ jobs:
           #/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           brew install git ccache autoconf libtool automake pkg-config sassc optipng python bison flex cmake itstool gnu-sed openssl@3
 
+      - name: Ensure compiler env is set (for jhbuild)
+        run: |
+          echo "CC=/usr/bin/clang" >> $GITHUB_ENV
+          echo "CXX=/usr/bin/clang++" >> $GITHUB_ENV
+          echo "CCACHE_DISABLE=1" >> $GITHUB_ENV
+          echo "JHBUILD_DISABLE_CCACHE=1" >> $GITHUB_ENV
+
       - name: Setup JHbuild
         run: |
           ln -sf $PWD/osx/jhbuildrc-custom $HOME/.jhbuildrc-custom
@@ -96,6 +103,13 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
+
+      - name: Ensure compiler env is set (for jhbuild)
+        run: |
+          echo "CC=/usr/bin/clang" >> $GITHUB_ENV
+          echo "CXX=/usr/bin/clang++" >> $GITHUB_ENV
+          echo "CCACHE_DISABLE=1" >> $GITHUB_ENV
+          echo "JHBUILD_DISABLE_CCACHE=1" >> $GITHUB_ENV
 
       - name: Setup JHbuild
         run: |
