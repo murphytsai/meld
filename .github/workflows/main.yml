@@ -15,7 +15,7 @@ jobs:
     runs-on: macos-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Check System
         run: |
@@ -34,13 +34,13 @@ jobs:
 
       # Cache downloaded sources. This shouldn't really depend on the jhbuildrc-custom
       # TODO: Figure out a better cache key for sources.
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             /Users/runner/Sources
           key: ${{ hashFiles('osx/jhbuildrc-custom') }}
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             /Users/runner/gtk
@@ -58,7 +58,7 @@ jobs:
           tar -czf /Users/runner/work/environment.tar.gz $HOME/gtk $HOME/.new_local
 
       - name: Upload Environment
-        uses: actions/upload-artifact@v3.1.3
+        uses: actions/upload-artifact@v4
         with:
           name: Environment
           path: |
@@ -70,8 +70,8 @@ jobs:
     needs: build-environment
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
 
       - name: Setup JHbuild
         run: |
@@ -107,7 +107,7 @@ jobs:
           ~/.new_local/bin/jhbuild run osx/build_app.sh
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3.1.3
+        uses: actions/upload-artifact@v4
         with:
           name: Package
           path: |
