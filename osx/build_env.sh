@@ -16,19 +16,19 @@ export PATH=$HOME/.new_local/bin:$HOME/gtk/inst/bin:$PATH
 
 mkdir -p $HOME/gtk/inst/bin
 
-#brew install autoconf libtool automake pkg-config sassc optipng python bison flex cmake itstool xz
-ln -sf /usr/local/bin/autoconf ~/gtk/inst/bin
-ln -sf /usr/local/bin/autoreconf ~/gtk/inst/bin
-ln -sf /usr/local/bin/automake ~/gtk/inst/bin
-ln -sf /usr/local/bin/autopoint ~/gtk/inst/bin
-ln -sf /usr/local/bin/pkg-config ~/gtk/inst/bin
-ln -sf /usr/local/bin/aclocal ~/gtk/inst/bin
-ln -sf /usr/local/bin/glibtoolize  ~/gtk/inst/bin/libtoolize 
-ln -sf /usr/local/bin/glibtool ~/gtk/inst/bin/libtool
-ln -sf /usr/local/bin/cmake ~/gtk/inst/bin
-ln -sf /usr/local/opt/bison/bin/bison ~/gtk/inst/bin
-ln -sf /usr/local/bin/itstool ~/gtk/inst/bin
-ln -sf /usr/local/bin/xz ~/gtk/inst/bin
+BREW_PREFIX="$(brew --prefix)"
+ln -sf "$BREW_PREFIX/bin/autoconf" ~/gtk/inst/bin
+ln -sf "$BREW_PREFIX/bin/autoreconf" ~/gtk/inst/bin
+ln -sf "$BREW_PREFIX/bin/automake" ~/gtk/inst/bin
+ln -sf "$BREW_PREFIX/bin/autopoint" ~/gtk/inst/bin
+ln -sf "$BREW_PREFIX/bin/pkg-config" ~/gtk/inst/bin
+ln -sf "$BREW_PREFIX/bin/aclocal" ~/gtk/inst/bin
+ln -sf "$BREW_PREFIX/bin/glibtoolize" ~/gtk/inst/bin/libtoolize 
+ln -sf "$BREW_PREFIX/bin/glibtool" ~/gtk/inst/bin/libtool
+ln -sf "$BREW_PREFIX/bin/cmake" ~/gtk/inst/bin
+ln -sf "$BREW_PREFIX/opt/bison/bin/bison" ~/gtk/inst/bin
+ln -sf "$BREW_PREFIX/bin/itstool" ~/gtk/inst/bin
+ln -sf "$BREW_PREFIX/bin/xz" ~/gtk/inst/bin
 
 pushd . > /dev/null
 
@@ -106,7 +106,7 @@ jhbuild buildone libxml2
 #(cd $HOME/gtk/inst/bin && touch itstool && chmod +x itstool)
 
 PY_SITE_PACKAGES=$(~/gtk/inst/bin/python3 -c 'import site; print(site.getsitepackages()[0], end="")')
-/usr/local/bin/pip3 install six pygments --target $PY_SITE_PACKAGES
+"$BREW_PREFIX/bin/pip3" install six pygments --target $PY_SITE_PACKAGES
 
 # Build all the way up to freetype, then fix its pkg-config
 PYTHON=$HOME/gtk/inst/bin/python3 jhbuild build freetype
@@ -114,7 +114,7 @@ gsed -i '/^Requires.private.*/d' $HOME/gtk/inst/lib/pkgconfig/freetype2.pc
 
 # Continue
 PYTHON=$HOME/gtk/inst/bin/python3 jhbuild build #-s freetype-no-harfbuzz
-/usr/local/bin/pip3 install pyobjc-core pyobjc-framework-Cocoa py2app --target $PY_SITE_PACKAGES
+"$BREW_PREFIX/bin/pip3" install pyobjc-core pyobjc-framework-Cocoa py2app --target $PY_SITE_PACKAGES
 
 cat $HOME/gtk/inst/lib/pkgconfig/epoxy.pc | grep -v x11 > $HOME/gtk/inst/lib/pkgconfig/epoxy.pc.1
 mv $HOME/gtk/inst/lib/pkgconfig/epoxy.pc $HOME/gtk/inst/lib/pkgconfig/epoxy.pc.orig

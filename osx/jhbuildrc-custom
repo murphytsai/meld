@@ -4,6 +4,7 @@
 print("Using Meld for OSX customization")
 
 import os.path
+import shutil
 from os import path
 
 # Reference: https://gnome.pages.gitlab.gnome.org/jhbuild/config-reference.html
@@ -16,10 +17,11 @@ setup_release()
 os.environ['CONFIG_SHELL'] = '/bin/bash'
 _gtk_osx_use_jhbuild_python = True
 
-if path.exists("/usr/local/bin/ccache"):
+ccache_path = shutil.which("ccache")
+if ccache_path:
   print("Using ccache")
-  os.environ["CC"] = "/usr/local/bin/ccache /usr/bin/clang"
-  os.environ["CXX"] = "/usr/local/bin/ccache /usr/bin/clang++"
+  os.environ["CC"] = f"{ccache_path} /usr/bin/clang"
+  os.environ["CXX"] = f"{ccache_path} /usr/bin/clang++"
 else:
   print("Not using ccache")
   os.environ["CC"] = "/usr/bin/clang"
