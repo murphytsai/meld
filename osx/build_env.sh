@@ -12,6 +12,10 @@ failure() {
 }
 trap 'failure ${LINENO} "$BASH_COMMAND"' ERR
 
+export CC=/usr/bin/clang
+export CXX=/usr/bin/clang++
+export CCACHE_DISABLE=1
+
 export PATH=$HOME/.new_local/bin:$HOME/gtk/inst/bin:$PATH
 
 mkdir -p $HOME/gtk/inst/bin
@@ -33,7 +37,7 @@ ln -sf "$BREW_PREFIX/bin/xz" ~/gtk/inst/bin
 pushd . > /dev/null
 
 export PKG_CONFIG_PATH=$HOME/gtk/inst/lib/pkgconfig:$HOME/gtk/inst/share/pkgconfig
-export PKG_CONFIG_LIBDIR==$HOME/gtk/inst/lib/pkgconfig
+export PKG_CONFIG_LIBDIR=$HOME/gtk/inst/lib/pkgconfig
 export XDG_DATA_DIRS=$HOME/gtk/inst/share
 
 [ -d $HOME/gtk/inst/lib/gettext ] || \
@@ -180,6 +184,5 @@ exit
 	./pip3 install six
 	touch itstool && chmod +x itstool		#dummy itstool to compile gtk-doc
 }
-
 
 

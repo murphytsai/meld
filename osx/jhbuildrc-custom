@@ -18,14 +18,15 @@ os.environ['CONFIG_SHELL'] = '/bin/bash'
 _gtk_osx_use_jhbuild_python = True
 
 ccache_path = shutil.which("ccache")
-if ccache_path:
+ccache_disabled = os.environ.get("CCACHE_DISABLE") == "1" or os.environ.get("JHBUILD_DISABLE_CCACHE") == "1"
+if ccache_path and not ccache_disabled:
   print("Using ccache")
   os.environ["CC"] = f"{ccache_path} /usr/bin/clang"
   os.environ["CXX"] = f"{ccache_path} /usr/bin/clang++"
 else:
   print("Not using ccache")
-  os.environ["CC"] = "/usr/bin/clang"
-  os.environ["CXX"] = "/usr/bin/clang++"
+  os.environ["CC"] = os.environ.get("CC", "/usr/bin/clang")
+  os.environ["CXX"] = os.environ.get("CXX", "/usr/bin/clang++")
 
 environ_prepend('CXXFLAGS', '-std=c++11 -stdlib=libc++')
 
