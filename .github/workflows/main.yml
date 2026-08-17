@@ -46,6 +46,15 @@ jobs:
             /Users/runner/gtk
           key: ${{ runner.os }}-${{ hashFiles('osx/jhbuildrc-custom') }}-${{ hashFiles('osx/build_env.sh') }}
 
+      - name: Setup macOS SDK paths
+        run: |
+          export SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"
+          export LDFLAGS="-L${SDKROOT}/usr/lib"
+          export CPPFLAGS="-I${SDKROOT}/usr/include"
+          echo "SDKROOT=${SDKROOT}" >> $GITHUB_ENV
+          echo "LDFLAGS=${LDFLAGS}" >> $GITHUB_ENV
+          echo "CPPFLAGS=${CPPFLAGS}" >> $GITHUB_ENV
+
       - name: Build Environment
         run: |
           echo Building in $HOME/gtk/inst
@@ -88,6 +97,15 @@ jobs:
           tar -xzf /Users/runner/work/meld/meld/Environment/environment.tar.gz
           rm -f /Users/runner/work/meld/meld/Environment/environment.tar.gz
           ls $HOME/gtk
+
+      - name: Setup macOS SDK paths
+        run: |
+          export SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"
+          export LDFLAGS="-L${SDKROOT}/usr/lib"
+          export CPPFLAGS="-I${SDKROOT}/usr/include"
+          echo "SDKROOT=${SDKROOT}" >> $GITHUB_ENV
+          echo "LDFLAGS=${LDFLAGS}" >> $GITHUB_ENV
+          echo "CPPFLAGS=${CPPFLAGS}" >> $GITHUB_ENV
 
       - name: FIX gir
         run: |
