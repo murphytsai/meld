@@ -29,8 +29,10 @@ jobs:
           #/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           brew install git ccache autoconf libtool automake pkg-config sassc optipng python bison flex cmake itstool gnu-sed openssl@3
           # Configure wget to use GitHub token for authenticated requests
-          mkdir -p ~/.wgetrc
-          echo "header = Authorization: token $GITHUB_TOKEN" >> ~/.wgetrc
+          rm -rf ~/.wgetrc
+          cat > ~/.wgetrc << 'EOF'
+header = Authorization: token $GITHUB_TOKEN
+EOF
 
       - name: Ensure compiler env is set (for jhbuild)
         run: |
@@ -131,8 +133,10 @@ jobs:
         run: |
           brew install git ccache autoconf libtool automake pkg-config sassc optipng python bison flex cmake itstool gnu-sed intltool openssl@3
           # Configure wget to use GitHub token for authenticated requests
-          mkdir -p ~/.wgetrc
-          echo "header = Authorization: token $GITHUB_TOKEN" >> ~/.wgetrc
+          rm -rf ~/.wgetrc
+          cat > ~/.wgetrc << 'EOF'
+header = Authorization: token $GITHUB_TOKEN
+EOF
           pwd
           mkdir -p $HOME/Source          
           tar -xzf /Users/runner/work/meld/meld/Environment/environment.tar.gz
