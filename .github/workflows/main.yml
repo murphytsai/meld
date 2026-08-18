@@ -23,9 +23,14 @@ jobs:
           which git || echo "git not found"
 
       - name: Setup Homebrew & Various Tools
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           #/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           brew install git ccache autoconf libtool automake pkg-config sassc optipng python bison flex cmake itstool gnu-sed openssl@3
+          # Configure wget to use GitHub token for authenticated requests
+          mkdir -p ~/.wgetrc
+          echo "header = Authorization: token $GITHUB_TOKEN" >> ~/.wgetrc
 
       - name: Ensure compiler env is set (for jhbuild)
         run: |
@@ -78,6 +83,8 @@ jobs:
           echo "CCACHE_DISABLE=${CCACHE_DISABLE}" >> $GITHUB_ENV
 
       - name: Build Environment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo Building in $HOME/gtk/inst
           cd osx && /bin/bash ./build_env.sh          
@@ -117,10 +124,15 @@ jobs:
           /bin/bash -c "$(curl -fsSL https://gitlab.gnome.org/GNOME/gtk-osx/raw/master/gtk-osx-setup.sh)"
 
       - name: Extract Environment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: /
         shell: 'bash'
         run: |
           brew install git ccache autoconf libtool automake pkg-config sassc optipng python bison flex cmake itstool gnu-sed intltool openssl@3
+          # Configure wget to use GitHub token for authenticated requests
+          mkdir -p ~/.wgetrc
+          echo "header = Authorization: token $GITHUB_TOKEN" >> ~/.wgetrc
           pwd
           mkdir -p $HOME/Source          
           tar -xzf /Users/runner/work/meld/meld/Environment/environment.tar.gz
@@ -162,6 +174,8 @@ jobs:
           cd osx && /bin/bash ./build_gtk_theme.sh
 
       - name: Package
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ~/.new_local/bin/jhbuild run osx/build_app.sh
 
