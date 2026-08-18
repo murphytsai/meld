@@ -30,7 +30,7 @@ jobs:
           brew install git ccache autoconf libtool automake pkg-config sassc optipng python bison flex cmake itstool gnu-sed openssl@3
           # Configure wget to use GitHub token for authenticated requests
           rm -rf ~/.wgetrc
-          cat > ~/.wgetrc << 'EOF'
+          cat > ~/.wgetrc << EOF
 header = Authorization: token $GITHUB_TOKEN
 EOF
 
@@ -134,7 +134,7 @@ EOF
           brew install git ccache autoconf libtool automake pkg-config sassc optipng python bison flex cmake itstool gnu-sed intltool openssl@3
           # Configure wget to use GitHub token for authenticated requests
           rm -rf ~/.wgetrc
-          cat > ~/.wgetrc << 'EOF'
+          cat > ~/.wgetrc << EOF
 header = Authorization: token $GITHUB_TOKEN
 EOF
           pwd
