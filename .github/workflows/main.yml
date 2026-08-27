@@ -36,10 +36,15 @@ EOF
 
       - name: Ensure compiler env is set (for jhbuild)
         run: |
+          export SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"
           echo "CC=/usr/bin/clang" >> $GITHUB_ENV
           echo "CXX=/usr/bin/clang++" >> $GITHUB_ENV
           echo "CCACHE_DISABLE=1" >> $GITHUB_ENV
           echo "JHBUILD_DISABLE_CCACHE=1" >> $GITHUB_ENV
+          echo "SDKROOT=${SDKROOT}" >> $GITHUB_ENV
+          echo "CFLAGS=-isysroot ${SDKROOT}" >> $GITHUB_ENV
+          echo "CXXFLAGS=-isysroot ${SDKROOT}" >> $GITHUB_ENV
+          echo "LDFLAGS=-isysroot ${SDKROOT}" >> $GITHUB_ENV
 
       - name: Setup JHbuild
         run: |
@@ -115,10 +120,15 @@ EOF
 
       - name: Ensure compiler env is set (for jhbuild)
         run: |
+          export SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"
           echo "CC=/usr/bin/clang" >> $GITHUB_ENV
           echo "CXX=/usr/bin/clang++" >> $GITHUB_ENV
           echo "CCACHE_DISABLE=1" >> $GITHUB_ENV
           echo "JHBUILD_DISABLE_CCACHE=1" >> $GITHUB_ENV
+          echo "SDKROOT=${SDKROOT}" >> $GITHUB_ENV
+          echo "CFLAGS=-isysroot ${SDKROOT}" >> $GITHUB_ENV
+          echo "CXXFLAGS=-isysroot ${SDKROOT}" >> $GITHUB_ENV
+          echo "LDFLAGS=-isysroot ${SDKROOT}" >> $GITHUB_ENV
 
       - name: Setup JHbuild
         run: |
